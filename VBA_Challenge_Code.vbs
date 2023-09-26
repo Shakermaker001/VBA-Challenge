@@ -7,18 +7,11 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
+
 Sub Stock_Analysis()
 
- ' Declare Current as a worksheet object variable.
-         Dim ws As Worksheet
-
-         ' Loop through all of the worksheets in the active workbook.
-         For Each ws In Worksheets
-
-
-
-
-
+Dim ws As Worksheet
+For Each ws In Worksheets
 
 Dim ticker As String '3-digit abbreviation
 Dim yearly_change As Double ' value change (+,-)
@@ -27,7 +20,7 @@ Dim total_stock_volume As LongLong 'total volume traded
 Dim analysis_table_row As Integer ' location of looped data
 Dim open_price_row As Double
 
-last_row = ws.Cells(Rows.Count, 1).End(xlUp).Row ' pings last row in for loop
+last_row = ws.Cells(Rows.Count, 1).End(xlUp).Row
 
 ws.Range("I1").Value = "Ticker"
 ws.Range("J1").Value = "Yearly change"
@@ -68,15 +61,14 @@ open_price_row = 2
             
             ws.Range("L" & analysis_table_row).Value = total_stock_volume
             
-            If ws.Range("J" & analysis_table_row).Value > 0 Then
-             ws.Range("J" & analysis_table_row).Interior.ColorIndex = 4
-             ElseIf ws.Range("J" & analysis_table_row).Value < 0 Then
-              ws.Range("J" & analysis_table_row).Interior.ColorIndex = 3
+                If ws.Range("J" & analysis_table_row).Value > 0 Then
+                ws.Range("J" & analysis_table_row).Interior.ColorIndex = 4
+            
+                ElseIf ws.Range("J" & analysis_table_row).Value < 0 Then
+                ws.Range("J" & analysis_table_row).Interior.ColorIndex = 3
+              
               End If
               
-              
-             
-            
             analysis_table_row = analysis_table_row + 1
             
             total_stock_volume = 0
@@ -88,28 +80,24 @@ open_price_row = 2
         Else
         
             total_stock_volume = total_stock_volume + ws.Cells(i, 7).Value
-        
-            
-        
-        End If
-    
+    End If
+
     Next i
     
-    ws.Range("Q2").Value = WorksheetFunction.Max(ws.Range("K2:K" & last_row))
+      ws.Range("Q2").Value = WorksheetFunction.Max(ws.Range("K2:K" & last_row))
+      ws.Range("Q2").NumberFormat = "0.00%"
     
-            ws.Range("Q2").NumberFormat = "0.00%"
-    ws.Range("Q3").Value = WorksheetFunction.Min(ws.Range("K2:K" & last_row))
-            ws.Range("Q3").NumberFormat = "0.00%"
-    ws.Range("Q4").Value = WorksheetFunction.Max(ws.Range("L2:L" & last_row))
-    max_increase_index = WorksheetFunction.Match(ws.Range("Q2").Value, ws.Range("K2:K" & last_row), 0)
-     max_decrease_index = WorksheetFunction.Match(ws.Range("Q3").Value, ws.Range("K2:K" & last_row), 0)
+      ws.Range("Q3").Value = WorksheetFunction.Min(ws.Range("K2:K" & last_row))
+      ws.Range("Q3").NumberFormat = "0.00%"
+      ws.Range("Q4").Value = WorksheetFunction.Max(ws.Range("L2:L" & last_row))
+    
+      max_increase_index = WorksheetFunction.Match(ws.Range("Q2").Value, ws.Range("K2:K" & last_row), 0)
+      max_decrease_index = WorksheetFunction.Match(ws.Range("Q3").Value, ws.Range("K2:K" & last_row), 0)
       max_volume_index = WorksheetFunction.Match(ws.Range("Q4").Value, ws.Range("L2:L" & last_row), 0)
 
-    
-   ws.Range("P2").Value = ws.Cells(max_increase_index + 1, 9).Value
-    ws.Range("P3").Value = ws.Cells(max_decrease_index + 1, 9).Value
-     ws.Range("P4").Value = ws.Cells(max_volume_index + 1, 9).Value
+      ws.Range("P2").Value = ws.Cells(max_increase_index + 1, 9).Value
+      ws.Range("P3").Value = ws.Cells(max_decrease_index + 1, 9).Value
+      ws.Range("P4").Value = ws.Cells(max_volume_index + 1, 9).Value
 
-Next ws
-
+  Next ws
 End Sub
